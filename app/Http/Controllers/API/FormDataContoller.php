@@ -12,11 +12,19 @@ class FormDataContoller extends Controller
 {
     public function store(FormDataRequest $request){
 
-        $formData = new FormData();
-        $formData->name   = $request->get('name');
-        $formData->surname = $request->get('surname');
         try {
 
+            $formData = new FormData();
+            $formData->name   = $request->get('name');
+            $formData->surname = $request->get('surname');
+            if( NULL != $request->get('file') ){
+
+                $file = $request->get('file');
+                $filename =  microtime('.') * 10000;
+                $destination = 'images';
+                $formData->link = $filename;
+                $file->move($destination, $filename);
+            }
             $formData->save();
             return response()->json([ 'success' => true ]);
 

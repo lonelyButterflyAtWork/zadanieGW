@@ -16,7 +16,7 @@
         </label>
         <label>
             <p>Plik</p>
-            <input type="file" name="file" id="file" accept="image/png,image/jpg,image/jpeg" >
+            <input type="file" name="file" id="file" accept="image/png,image/jpg,image/jpeg" onload="loadImage()">
         </label>
     </form>
     <button class="button" onclick="sendData()">Wyślij</button>
@@ -25,20 +25,31 @@
 <script>
 
     var url =  '{{ route("formdata.store") }}';
+    var file;
+
+    function loadCanvasWithInputFile(){
+        var fileinput = document.getElementById('file');
+        fileinput.onchange = function(evt) {
+            var files = evt.target.files;
+            var file = files[0];
+            if(file.type.match('image.*')) {
+                var reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function(evt){
+                    if( evt.target.readyState == FileReader.DONE) {
+                        file = evt.target.result;
+                    }
+                }
+
+            } else {
+                alert("not an image");
+            }
+        };
+    }
 
     function sendData(){
-        var fileField = document.querySelector('#file').value;
-
-        if(fileField.files){
-
-            const formData = new FormData();
-            formData.append('file', fileField.files[0]);
-
-        } else{
-            formData =  null;
-        }
-
-
+        var formData;
+        var fileField = document.querySelector('#file');
         let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
 
@@ -53,7 +64,7 @@
                 body: JSON.stringify({
                     name    : document.querySelector('#name').value,
                     surname : document.querySelector('#surname').value,
-                    file    : formData
+                    file    : file
 
                 })
         })

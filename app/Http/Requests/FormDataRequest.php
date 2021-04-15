@@ -26,7 +26,6 @@ class FormDataRequest extends FormRequest
         return [
             'name'    => 'required|string',
             'surname' => 'nullable|string',
-            'file'    => 'nullable|mimes:jpg,jpeg,png',
         ];
     }
 }

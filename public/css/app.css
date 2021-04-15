@@ -32106,6 +32106,10 @@ input{
   color: black;
 }
 
+td, th {
+  border: 1px solid black;
+}
+
 @media (min-width: 640px) {
   .sm\:container {
     width: 100%;
