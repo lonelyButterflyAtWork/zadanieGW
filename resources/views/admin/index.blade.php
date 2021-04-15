@@ -20,7 +20,7 @@
                                 <tr>
                                     <td> {{$data->name    ?? ""}} </td>
                                     <td> {{$data->surname ?? ""}} </td>
-                                    <td> {{$data->link    ?? ""}} </td>
+                                    <td> @if($data->link != null)  <a target="_blank" href="{{ asset('images') . '/'. $data->link }}">link do pliku</a> @endif </td>
                                 </tr>
                             @endforeach
                          </tbody>

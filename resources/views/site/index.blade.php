@@ -16,7 +16,9 @@
         </label>
         <label>
             <p>Plik</p>
-            <input type="file" name="file" id="file" accept="image/png,image/jpg,image/jpeg" onload="loadImage()">
+            <input type="file"  name="file" id="file" accept="image/png,image/jpg,image/jpeg">
+            <input type="hidden" name="file2" id="hiddenFile">
+
         </label>
     </form>
     <button class="button" onclick="sendData()">Wyślij</button>
@@ -25,7 +27,6 @@
 <script>
 
     var url =  '{{ route("formdata.store") }}';
-    var file;
 
     function loadCanvasWithInputFile(){
         var fileinput = document.getElementById('file');
@@ -37,7 +38,7 @@
                 reader.readAsDataURL(file);
                 reader.onload = function(evt){
                     if( evt.target.readyState == FileReader.DONE) {
-                        file = evt.target.result;
+                        document.querySelector('#hiddenFile').value = evt.target.result;
                     }
                 }
 
@@ -46,11 +47,12 @@
             }
         };
     }
-
+    loadCanvasWithInputFile();
     function sendData(){
         var formData;
         var fileField = document.querySelector('#file');
         let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        console.log(file);
 
 
         fetch(url, {
@@ -64,7 +66,7 @@
                 body: JSON.stringify({
                     name    : document.querySelector('#name').value,
                     surname : document.querySelector('#surname').value,
-                    file    : file
+                    file    : document.querySelector('#hiddenFile').value
 
                 })
         })
